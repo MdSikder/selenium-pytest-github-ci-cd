@@ -24,4 +24,4 @@ def test_login():
     # Check if login was successful by checking the page title
     assert "ProtoCommerce" in driver.title
 
-    driver.quit()
+    driver.close()
