@@ -13,7 +13,7 @@ def test_login():
     driver.find_element(By.NAME, "password").send_keys("learning")
     driver.find_element(By.XPATH, "//input[@name='signin']").click()
 
-    time.sleep(5)
+    time.sleep(3)
     # Check if login was successful by checking the page title
     assert "ProtoCommerce" in driver.title
 
