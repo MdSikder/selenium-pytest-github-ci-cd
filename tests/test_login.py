@@ -16,7 +16,6 @@ def test_login():
     chrome_options.add_argument("--window-size=1920x1080")  # Optional: Set window size
 
     driver = webdriver.Chrome(options=chrome_options)
-
     driver.get("https://rahulshettyacademy.com/loginpagePractise/")
     # Locate elements and perform actions
     driver.find_element(By.ID, "username").send_keys("rahulshettyacademy")
@@ -28,7 +27,6 @@ def test_login():
     assert "ProtoCommerce" in driver.title
 
     driver.quit()
-
 
 # def test_login():
 #     driver = webdriver.Chrome()
