@@ -2,11 +2,21 @@ import time
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
 
 
 def test_login():
-    driver = webdriver.Chrome()
-    driver.maximize_window()
+    chrome_options = Options()
+    chrome_options.add_argument("--headless")  # Run in headless mode
+    chrome_options.add_argument("--no-sandbox")  # Disable sandbox for CI environments
+    chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
+    chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering
+    chrome_options.add_argument("--window-size=1920x1080")  # Optional: Set window size
+
+    driver = webdriver.Chrome(options=chrome_options)
+
     driver.get("https://rahulshettyacademy.com/loginpagePractise/")
     # Locate elements and perform actions
     driver.find_element(By.ID, "username").send_keys("rahulshettyacademy")
@@ -18,3 +28,19 @@ def test_login():
     assert "ProtoCommerce" in driver.title
 
     driver.quit()
+
+
+# def test_login():
+#     driver = webdriver.Chrome()
+#     driver.maximize_window()
+#     driver.get("https://rahulshettyacademy.com/loginpagePractise/")
+#     # Locate elements and perform actions
+#     driver.find_element(By.ID, "username").send_keys("rahulshettyacademy")
+#     driver.find_element(By.NAME, "password").send_keys("learning")
+#     driver.find_element(By.XPATH, "//input[@name='signin']").click()
+#
+#     time.sleep(5)
+#     # Check if login was successful by checking the page title
+#     assert "ProtoCommerce" in driver.title
+#
+#     driver.quit()
