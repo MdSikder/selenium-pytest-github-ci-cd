@@ -1,44 +1,29 @@
 import time
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
+from pages.login import LoginPage  # Assuming the LoginPage is in login_page.py
 
 
 def test_login():
     chrome_options = Options()
-    chrome_options.add_argument("--headless")  # Run in headless mode
-    chrome_options.add_argument("--no-sandbox")  # Disable sandbox for CI environments
-    chrome_options.add_argument("--disable-dev-shm-usage")  # Overcome limited resource problems
-    chrome_options.add_argument("--disable-gpu")  # Disable GPU rendering
-    chrome_options.add_argument("--window-size=1920x1080")  # Optional: Set window size
+    chrome_options.add_argument("--headless")
+    chrome_options.add_argument("--no-sandbox")
+    chrome_options.add_argument("--disable-dev-shm-usage")
+    chrome_options.add_argument("--disable-gpu")
+    chrome_options.add_argument("--window-size=1920x1080")
 
     driver = webdriver.Chrome(options=chrome_options)
-    driver.get("https://rahulshettyacademy.com/loginpagePractise/")
-    # Locate elements and perform actions
-    driver.find_element(By.ID, "username").send_keys("rahulshettyacademy")
-    driver.find_element(By.NAME, "password").send_keys("learning")
-    driver.find_element(By.XPATH, "//input[@name='signin']").click()
 
-    time.sleep(5)
-    # Check if login was successful by checking the page title
-    assert "ProtoCommerce" in driver.title
+    try:
+        # Initialize the LoginPage object
+        login_page = LoginPage(driver)
 
-    driver.quit()
+        # Open the page and perform actions
+        driver.get("https://rahulshettyacademy.com/loginpagePractise/")
+        login_page.login("rahulshettyacademy", "learning")
 
-# def test_login():
-#     driver = webdriver.Chrome()
-#     driver.maximize_window()
-#     driver.get("https://rahulshettyacademy.com/loginpagePractise/")
-#     # Locate elements and perform actions
-#     driver.find_element(By.ID, "username").send_keys("rahulshettyacademy")
-#     driver.find_element(By.NAME, "password").send_keys("learning")
-#     driver.find_element(By.XPATH, "//input[@name='signin']").click()
-#
-#     time.sleep(5)
-#     # Check if login was successful by checking the page title
-#     assert "ProtoCommerce" in driver.title
-#
-#     driver.quit()
+        # Check if login was successful
+        time.sleep(5)  # Wait for login to complete
+        assert "ProtoCommerce" in driver.title
+    finally:
+        driver.quit()
