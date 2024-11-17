@@ -1,0 +1,14 @@
+test:
+  base_url: "https://rahulshettyacademy.com/loginpagePractise/"
+  username: "rahulshettyacademy"
+  password: "learning"
+
+staging:
+  base_url: " https://rahulshettyacademy.com/"
+  username: "staginguser"
+  password: "stagingpassword"
+
+production:
+  base_url: "https://www.example.com"
+  username: "produser"
+  password: "prodpassword"

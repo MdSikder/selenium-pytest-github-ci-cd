@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from pages.login import LoginPage  # Assuming the LoginPage is in login_page.py
 from utils.logger import logger  # Importing the logger utility
+from config import Config
 
 
 def test_login():
@@ -20,10 +21,14 @@ def test_login():
         login_page = LoginPage(driver)
 
         # Open the page and perform actions
-        driver.get("https://rahulshettyacademy.com/loginpagePractise/")
-        logger.info("url opened successfully")
+        # driver.get("https://rahulshettyacademy.com/loginpagePractise/")
 
-        login_page.login("rahulshettyacademy", "learning")
+        base_url = Config.BASE_URL
+        driver.get(base_url)
+        logger.info(f"{base_url} url opened successfully")
+
+        login_page.login(Config.USERNAME, Config.PASSWORD)
+        # login_page.login("rahulshettyacademy", "learning")
         logger.info("username and password set successfully")
 
         # Check if login was successful

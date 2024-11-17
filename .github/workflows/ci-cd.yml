@@ -17,8 +17,13 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
+      - name: Set environment variable (Test)
+        run: echo "ENV=test" >> $GITHUB_ENV  # Set the default environment to 'test'
+
       - name: Run tests
-        run: pytest --maxfail=1 --disable-warnings -q --html=report.html
+        run: |
+          echo "Running tests in $ENV environment"
+          pytest --maxfail=1 --disable-warnings -q --html=report.html
 
       - name: Upload test report
         uses: actions/upload-artifact@v3
