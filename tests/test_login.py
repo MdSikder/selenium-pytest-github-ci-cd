@@ -14,8 +14,8 @@ def test_login():
     chrome_options.add_argument("--disable-gpu")
     chrome_options.add_argument("--window-size=1920x1080")
 
-    driver = webdriver.Chrome(options=chrome_options)
-
+    # driver = webdriver.Chrome(options=chrome_options)
+    driver = webdriver.Chrome()
     try:
         # Initialize the LoginPage object
         login_page = LoginPage(driver)
@@ -26,6 +26,7 @@ def test_login():
         base_url = Config.BASE_URL
         driver.get(base_url)
         logger.info(f"{base_url} url opened successfully")
+        print(f"{base_url} url opened successfully")
 
         login_page.login(Config.USERNAME, Config.PASSWORD)
         # login_page.login("rahulshettyacademy", "learning")
