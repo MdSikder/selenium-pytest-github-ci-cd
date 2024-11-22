@@ -18,24 +18,26 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Install Chrome and ChromeDriver
+      - name: Install Google Chrome
         run: |
-          # Install Google Chrome
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-          # Extract Chrome major version
+      - name: Install ChromeDriver
+        run: |
+          # Fetch the current Chrome version
           CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n1)
           CHROME_MAJOR=$(echo "$CHROME_VERSION" | cut -d '.' -f 1)
 
-          # Fetch and install matching ChromeDriver
+          # Fetch and install the matching ChromeDriver version
           DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR")
+          echo "Installing ChromeDriver version: $DRIVER_VERSION"
           wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
 
-          # Verify installations
+          # Verify the installations
           google-chrome --version
           chromedriver --version
 
