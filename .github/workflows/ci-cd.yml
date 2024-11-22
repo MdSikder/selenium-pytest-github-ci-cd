@@ -25,9 +25,27 @@ jobs:
 
       - name: Install ChromeDriver
         run: |
-          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+')
-          DRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION || echo "131.0.6778.85")
+          set -e
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' || echo "unknown")
+          CHROME_MAJOR_VERSION=$(echo $CHROME_VERSION | cut -d '.' -f 1)
           echo "Detected Chrome version: $CHROME_VERSION"
+          echo "Detected Chrome major version: $CHROME_MAJOR_VERSION"
+
+          # Try to get the exact matching ChromeDriver version
+          DRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION || echo "")
+          
+          # Fallback to major version
+          if [ -z "$DRIVER_VERSION" ]; then
+            echo "Exact ChromeDriver version not found. Trying major version..."
+            DRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR_VERSION || echo "")
+          fi
+
+          # Fallback to generic latest release
+          if [ -z "$DRIVER_VERSION" ]; then
+            echo "Major version ChromeDriver also not found. Falling back to latest release..."
+            DRIVER_VERSION=$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE || echo "")
+          fi
+
           echo "Using ChromeDriver version: $DRIVER_VERSION"
           wget --tries=3 https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
