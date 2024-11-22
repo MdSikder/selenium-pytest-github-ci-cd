@@ -36,3 +36,4 @@ def test_login():
         assert "ProtoCommerce" in driver.title
     finally:
         driver.quit()
+
