@@ -24,8 +24,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y google-chrome-stable
 
-          # Install the latest ChromeDriver
-          wget -q https://chromedriver.storage.googleapis.com/`curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
+          # Extract Chrome major version
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+' | head -n1)
+          CHROME_MAJOR=$(echo "$CHROME_VERSION" | cut -d '.' -f 1)
+
+          # Fetch and install matching ChromeDriver
+          DRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_MAJOR")
+          wget -q "https://chromedriver.storage.googleapis.com/$DRIVER_VERSION/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/bin/chromedriver
           sudo chmod +x /usr/bin/chromedriver
@@ -34,12 +39,9 @@ jobs:
           google-chrome --version
           chromedriver --version
 
-      - name: Set environment variable (Test)
-        run: echo "ENV=test" >> $GITHUB_ENV
-
       - name: Run tests
         run: |
-          echo "Running tests in $ENV environment"
+          echo "Running tests in headless mode"
           pytest --maxfail=1 --disable-warnings -q --html=report.html
 
       - name: Upload test report
